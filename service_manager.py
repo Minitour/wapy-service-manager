@@ -7,7 +7,7 @@ app = Flask(__name__)
 debug = os.environ['DEBUG_SERVICE_MANAGER']
 
 methods = ['POST']
-if debug:
+if str(debug).lower() == "true":
     print("DEBUG MODE...")
     methods.append("GET")
 
