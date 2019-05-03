@@ -8,7 +8,6 @@ debug = os.environ['DEBUG_SERVICE_MANAGER']
 
 methods = ['POST']
 if str(debug).lower() == "true":
-    print("DEBUG MODE...")
     methods.append("GET")
 
 ##############
@@ -33,6 +32,8 @@ def switcher_helper(mode):
 def change_camera_mode(mode):
     if request.method == "GET":
         print("Method not allowed")
+        if debug:
+            print("debug mode...")
         return
 
     mode_str = switcher_helper(mode)
@@ -43,22 +44,28 @@ def change_camera_mode(mode):
 
 @app.route('/calibration/<mode>', methods=methods)
 def change_calibration_mode(mode):
+    if request.method == "GET":
+        print("Method not allowed")
+        if debug:
+            print("debug mode...")
+        return
+
     mode_str = switcher_helper(mode)
     print("will {} the calibration service".format(mode_str))
-    if debug:
-        print("debug mode, did not do anything")
-        return
     command = "nssm {} calibration-service".format(mode_str)
     change_mod(command)
 
 
 @app.route('/connectivity/<mode>', methods=methods)
 def change_connectivity_mode(mode):
+    if request.method == "GET":
+        print("Method not allowed")
+        if debug:
+            print("debug mode...")
+        return
+
     mode_str = switcher_helper(mode)
     print("will {} the connectivity service".format(mode_str))
-    if debug:
-        print("debug mode, did not do anything")
-        return
     command = "nssm {} connectivity-service".format(mode_str)
     change_mod(command)
 
