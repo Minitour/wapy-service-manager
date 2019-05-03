@@ -31,8 +31,8 @@ def switcher_helper(mode):
 
 @app.route('/camera/<mode>', methods=methods)
 def change_camera_mode(mode):
-    if (not debug and request.method == "GET") or (debug):
-        print("debug mode, did not do anything" if debug else "Method not allowed")
+    if request.method == "GET":
+        print("Method not allowed")
         return
 
     mode_str = switcher_helper(mode)
@@ -41,9 +41,8 @@ def change_camera_mode(mode):
     change_mod(command)
 
 
-@app.route('/calibration', methods=methods)
-def change_calibration_mode():
-    mode = request.form.get("mode")
+@app.route('/calibration/<mode>', methods=methods)
+def change_calibration_mode(mode):
     mode_str = switcher_helper(mode)
     print("will {} the calibration service".format(mode_str))
     if debug:
@@ -53,9 +52,8 @@ def change_calibration_mode():
     change_mod(command)
 
 
-@app.route('/connectivity', methods=methods)
-def change_connectivity_mode():
-    mode = request.form.get("mode")
+@app.route('/connectivity/<mode>', methods=methods)
+def change_connectivity_mode(mode):
     mode_str = switcher_helper(mode)
     print("will {} the connectivity service".format(mode_str))
     if debug:
