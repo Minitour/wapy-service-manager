@@ -29,14 +29,14 @@ def switcher_helper(mode):
         return ""
 
 
-@app.route('/camera', methods=methods)
-def change_camera_mode():
-    mode = request.form.get("mode")
+@app.route('/camera/<mode>', methods=methods)
+def change_camera_mode(mode):
+    if (not debug and request.method == "GET") or (debug):
+        print("debug mode, did not do anything" if debug else "Method not allowed")
+        return
+
     mode_str = switcher_helper(mode)
     print("will {} the camera service".format(mode_str))
-    if debug:
-        print("debug mode, did not do anything")
-        return
     command = "nssm {} camera-service".format(mode_str)
     change_mod(command)
 
