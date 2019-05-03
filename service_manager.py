@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, request
 import subprocess
 import os
 
@@ -29,8 +29,9 @@ def switcher_helper(mode):
         return ""
 
 
-@app.route('/camera/<mode>', methods=methods)
-def change_camera_mode(mode):
+@app.route('/camera', methods=methods)
+def change_camera_mode():
+    mode = request.form.get("mode")
     mode_str = switcher_helper(mode)
     print("will {} the camera service".format(mode_str))
     if debug:
@@ -40,8 +41,9 @@ def change_camera_mode(mode):
     change_mod(command)
 
 
-@app.route('/calibration/<mode>', methods=methods)
-def change_calibration_mode(mode):
+@app.route('/calibration', methods=methods)
+def change_calibration_mode():
+    mode = request.form.get("mode")
     mode_str = switcher_helper(mode)
     print("will {} the calibration service".format(mode_str))
     if debug:
@@ -51,8 +53,9 @@ def change_calibration_mode(mode):
     change_mod(command)
 
 
-@app.route('/connectivity/<mode>', methods=methods)
-def change_connectivity_mode(mode):
+@app.route('/connectivity', methods=methods)
+def change_connectivity_mode():
+    mode = request.form.get("mode")
     mode_str = switcher_helper(mode)
     print("will {} the connectivity service".format(mode_str))
     if debug:
