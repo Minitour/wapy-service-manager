@@ -4,6 +4,12 @@ import os
 
 app = Flask(__name__)
 
+debug = os.environ['DEBUG_SERVICE_MANAGER']
+
+methods = ['POST']
+if debug:
+    print("DEBUG MODE...")
+    methods.append("GET")
 
 ##############
 # modes:
@@ -23,26 +29,35 @@ def switcher_helper(mode):
         return ""
 
 
-@app.route('/camera/<mode>', methods=['POST'])
+@app.route('/camera/<mode>', methods=methods)
 def change_camera_mode(mode):
     mode_str = switcher_helper(mode)
     print("will {} the camera service".format(mode_str))
+    if debug:
+        print("debug mode, did not do anything")
+        return
     command = "nssm {} camera-service".format(mode_str)
     change_mod(command)
 
 
-@app.route('/calibration/<mode>', methods=['POST'])
+@app.route('/calibration/<mode>', methods=methods)
 def change_calibration_mode(mode):
     mode_str = switcher_helper(mode)
     print("will {} the calibration service".format(mode_str))
+    if debug:
+        print("debug mode, did not do anything")
+        return
     command = "nssm {} calibration-service".format(mode_str)
     change_mod(command)
 
 
-@app.route('/connectivity/<mode>', methods=['POST'])
+@app.route('/connectivity/<mode>', methods=methods)
 def change_connectivity_mode(mode):
     mode_str = switcher_helper(mode)
     print("will {} the connectivity service".format(mode_str))
+    if debug:
+        print("debug mode, did not do anything")
+        return
     command = "nssm {} connectivity-service".format(mode_str)
     change_mod(command)
 
