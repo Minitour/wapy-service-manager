@@ -26,6 +26,8 @@ def main():
 
     out, error = wapy_agent.execute_command(command)
 
+    pid = -1
+
     for o in str(out).split("\\n"):
         out1 = o.lstrip('b')
         out1 = out1.lstrip('"')
@@ -34,12 +36,23 @@ def main():
         if check_python_command != -1:
             print("found command")
             command1 = out1.split()
-            print(command1)
+            try:
+                pid = int(command1[0].strip())
+            except Exception as error:
+                print(error)
+
         else:
             print("command not found")
         print(out1)
         print("\n")
-    #
+
+
+    if pid != -1:
+        kill_command = "kill {}".format(pid)
+        out, error = wapy_agent.execute_command(kill_command)
+        print(out)
+        print(error)
+    
     # print(out)
     # print("\n\n")
     # print(error)
