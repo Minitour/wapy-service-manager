@@ -33,7 +33,7 @@ def main():
         check_python_command = out1.find("python")
         if check_python_command != -1:
             print("found command")
-            command1 = out1.split("\t")
+            command1 = out1.split()
             print(command1)
         else:
             print("command not found")
