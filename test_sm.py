@@ -25,6 +25,11 @@ def main():
 
     out, error = wapy_agent.execute_command(command)
 
+    for o in str(out).split("\\n"):
+        out1 = o.lstrip('b')
+        out1 = out1.lstrip('"')
+        if out1 != "":
+            print(out1)
     print(out)
     print("\n\n")
     print(error)
