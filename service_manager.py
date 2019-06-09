@@ -1,7 +1,6 @@
 from flask import Flask, request
 import subprocess
 import os
-import wapy_agent
 
 app = Flask(__name__)
 
@@ -33,20 +32,6 @@ def switcher_helper(mode):
     except Exception as error:
         print("error: {}".format(error))
         return ""
-
-
-def execute_command(command):
-
-    try:
-        MyOut = subprocess.Popen(command.split(),
-                                 stdout=subprocess.PIPE,
-                                 stderr=subprocess.STDOUT)
-
-        # getting errors and the output
-        return MyOut.communicate()
-    except Exception as error:
-        print("ERROR: failed to execute command: {}".format(command))
-        return "","ERROR"
 
 
 @app.route('/camera/<mode>', methods=methods)
@@ -93,12 +78,15 @@ def change_connectivity_mode(mode):
 
 def change_mod(command):
 
-    MyOut = subprocess.Popen(str(command).split(" "),
-                stdout=subprocess.PIPE,
-                stderr=subprocess.STDOUT)
-    stdout,stderr = MyOut.communicate()
-    print(stdout)
-    print(stderr)
+    try:
+        MyOut = subprocess.Popen(command.split(),
+                                 stdout=subprocess.PIPE,
+                                 stderr=subprocess.STDOUT)
+
+        # getting errors and the output
+        MyOut.communicate()
+    except Exception as error:
+        print("ERROR: failed to execute command: {}".format(command))
 
 
 if __name__ == "__main__":
