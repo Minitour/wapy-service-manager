@@ -4,6 +4,7 @@ import json
 import wapy_agent
 import time
 import os
+import re
 
 
 def main():
@@ -28,11 +29,18 @@ def main():
     for o in str(out).split("\\n"):
         out1 = o.lstrip('b')
         out1 = out1.lstrip('"')
-        if out1 != "":
-            print(out1)
-    print(out)
-    print("\n\n")
-    print(error)
+
+        check_python_command = out1.find("python")
+        if check_python_command != -1:
+            print("found command")
+        else:
+            print("command not found")
+        print(out1)
+        print("\n")
+    #
+    # print(out)
+    # print("\n\n")
+    # print(error)
 
 
 if __name__ == "__main__":
