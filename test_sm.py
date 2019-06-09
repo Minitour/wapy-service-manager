@@ -11,6 +11,7 @@ def main():
         service_manager.kill_camera_service()
     if mode == 1:
         service_manager.start_camera_service()
+    return 0
 
 
 if __name__ == "__main__":
