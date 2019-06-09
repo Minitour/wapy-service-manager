@@ -12,11 +12,11 @@ def main():
     #
     # print(response.status_code)
     # print(response.text)
-    command = "python facial_landmarks.py"
-
-    out, errors = wapy_agent.execute_command(command)
-
-    time.sleep(10)
+    # command = "python facial_landmarks.py"
+    #
+    # out, errors = wapy_agent.execute_command(command)
+    #
+    # time.sleep(10)
 
     command = "ps aux | grep python"
 
