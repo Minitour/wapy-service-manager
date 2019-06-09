@@ -1,7 +1,7 @@
 import subprocess
 import os, sys
 import shutil
-from .service_manager import change_camera_mode, change_calibration_mode
+from service_manager import change_camera_mode, change_calibration_mode
 
 environment_variable_git_repo = "GIT_REPO_LOCATION"
 repos_to_zip = ["wapy-camera-service", "wapy-calibration-service"]
