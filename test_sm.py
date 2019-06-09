@@ -3,6 +3,7 @@ import sys
 import json
 import wapy_agent
 import time
+import os
 
 
 def main():
@@ -17,6 +18,8 @@ def main():
     # out, errors = wapy_agent.execute_command(command)
     #
     # time.sleep(10)
+
+    os.chdir("c:/Users/wapyi/Documents/wapy_src/CameraService")
 
     command = "ps aux | grep python"
 
