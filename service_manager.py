@@ -5,7 +5,8 @@ import wapy_agent
 
 app = Flask(__name__)
 
-debug = os.environ['DEBUG_SERVICE_MANAGER']
+#debug = os.environ['DEBUG_SERVICE_MANAGER']
+debug = True
 
 camera_service_path = "c:/Users/wapyi/Documents/wapy_src/CameraService"
 
@@ -57,7 +58,7 @@ def kill_camera_service():
     out, error = execute_command(command)
 
     # init the pid for the camera_service
-    pid = -1
+    pids = []
 
     # checking if the camera serivce is running
     for o in str(out).split("\\n"):
@@ -68,15 +69,17 @@ def kill_camera_service():
         if check_python_command != -1:
             command1 = out1.split()
             try:
-                pid = int(command1[0].strip())
+                pid_temp = int(command1[0].strip())
+                pids.append(pid_temp)
             except Exception as error:
                 print(error)
 
-    if pid != -1:
-        kill_command = "kill {}".format(pid)
-        out, error = execute_command(kill_command)
-        if not error:
-            print("camera service stopped")
+    if pids:
+        for pid in pids:
+            kill_command = "kill {}".format(pid)
+            out, error = execute_command(kill_command)
+            if not error:
+                print("camera service stopped")
     else:
         print("camera service is not running...")
 
@@ -98,7 +101,7 @@ def change_camera_mode(mode):
     if mode == 0:
         print("will stop the camera service")
         kill_camera_service()
-    
+
     if mode == 1:
         start_camera_service()
 
