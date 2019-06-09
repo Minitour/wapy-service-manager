@@ -87,7 +87,8 @@ def kill_camera_service():
 def start_camera_service():
     os.chdir(camera_service_path)
     command = "python facial_landmarks.py"
-    execute_command(command)
+    out, error = execute_command(command)
+    print(out)
 
 
 @app.route('/camera/<mode>', methods=methods)
@@ -103,6 +104,7 @@ def change_camera_mode(mode):
         kill_camera_service()
 
     if mode == 1:
+        print("will start the camera service")
         start_camera_service()
 
 
