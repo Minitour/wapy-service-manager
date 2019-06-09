@@ -99,13 +99,17 @@ def change_camera_mode(mode):
             print("debug mode...")
         return
 
-    if mode == 0:
-        print("will stop the camera service")
-        kill_camera_service()
-
-    if mode == 1:
-        print("will start the camera service")
-        start_camera_service()
+    mode_str = switcher_helper(mode)
+    print("will {} the camera service".format(mode_str))
+    command = "nssm {} camera-service".format(mode_str)
+    change_mod(command)
+    # if mode == 0:
+    #     print("will stop the camera service")
+    #     kill_camera_service()
+    #
+    # if mode == 1:
+    #     print("will start the camera service")
+    #     start_camera_service()
 
 
 @app.route('/calibration/<mode>', methods=methods)
