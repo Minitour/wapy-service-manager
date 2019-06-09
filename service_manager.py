@@ -1,14 +1,18 @@
 from flask import Flask, request
 import subprocess
 import os
+import wapy_agent
 
 app = Flask(__name__)
 
 debug = os.environ['DEBUG_SERVICE_MANAGER']
 
+camera_service_path = "c:/Users/wapyi/Documents/wapy_src/CameraService"
+
 methods = ['POST']
 if str(debug).lower() == "true":
     methods.append("GET")
+
 
 ##############
 # modes:
@@ -28,6 +32,61 @@ def switcher_helper(mode):
         return ""
 
 
+def execute_command(command):
+
+    try:
+        MyOut = subprocess.Popen(command.split(),
+                                 stdout=subprocess.PIPE,
+                                 stderr=subprocess.STDOUT)
+
+        # getting errors and the output
+        return MyOut.communicate()
+    except Exception as error:
+        print("ERROR: failed to execute command: {}".format(command))
+        return "","ERROR"
+
+
+def kill_camera_service():
+    # change dir to camera service
+    os.chdir(camera_service_path)
+
+    # command to get all python execs
+    command = "ps aux | grep python"
+
+    # get the out put (will get the pid from it)
+    out, error = execute_command(command)
+
+    # init the pid for the camera_service
+    pid = -1
+
+    # checking if the camera serivce is running
+    for o in str(out).split("\\n"):
+        out1 = o.lstrip('b')
+        out1 = out1.lstrip('"')
+
+        check_python_command = out1.find("python")
+        if check_python_command != -1:
+            command1 = out1.split()
+            try:
+                pid = int(command1[0].strip())
+            except Exception as error:
+                print(error)
+
+    if pid != -1:
+        kill_command = "kill {}".format(pid)
+        out, error = execute_command(kill_command)
+        if not error:
+            print("camera service stopped")
+    else:
+        print("camera service is not running...")
+
+
+def start_camera_service():
+    os.chdir(camera_service_path)
+    command = "python facial_landmarks.py"
+    execute_command(command)
+
+
 @app.route('/camera/<mode>', methods=methods)
 def change_camera_mode(mode):
     if request.method == "GET":
@@ -36,10 +95,12 @@ def change_camera_mode(mode):
             print("debug mode...")
         return
 
-    mode_str = switcher_helper(mode)
-    print("will {} the camera service".format(mode_str))
-    command = "nssm {} camera-service".format(mode_str)
-    change_mod(command)
+    if mode == 0:
+        print("will stop the camera service")
+        kill_camera_service()
+    
+    if mode == 1:
+        start_camera_service()
 
 
 @app.route('/calibration/<mode>', methods=methods)
